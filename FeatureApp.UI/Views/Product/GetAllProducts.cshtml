@@ -4,11 +4,6 @@
     ViewData["Title"] = "GetAllProducts";
 }
 
-<h1>GetAllProducts</h1>
-
-<p>
-    <a asp-action="Create">Add New</a>
-</p>
 <table class="table">
     <thead>
         <tr>
@@ -55,10 +50,13 @@
                 @Html.DisplayFor(modelItem => item.IsAvailable)
             </td>          
             <td>
-                @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-                @Html.ActionLink("Delete", "Delete", new { id=item.Id })
+                <a onclick="showInPopup('@Url.Action("Edit","Product",new {productId=item.Id},Context.Request.Scheme)','Update')" class="btn btn-info text-white"><i class="fas fa-pencil-alt"></i> Edit</a>
+                <a onclick="deleteConfirmation('@Url.Action("DeleteConfirmation","Product",new { idToDelete = item.Id },Context.Request.Scheme)')" class="btn btn-outline-danger text-danger"><i class="fas fa-trash-alt"></i> Delete</a>
             </td>
         </tr>
 }
     </tbody>
 </table>
+<div id="modal_container_delete">
+    <!--via ajax-->
+</div>

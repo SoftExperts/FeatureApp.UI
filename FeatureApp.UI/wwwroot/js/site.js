@@ -11,29 +11,42 @@ showInPopup = (url, title) => {
             $('#form-modal .modal-body').html(res.html);
             $('#form-modal .modal-title').html(title);
             $('#form-modal').modal('show');
-
-            // to make popup draggable
-            //$('.modal-dialog').draggable({
-            //    handle: ".modal-header"
-            //});
         }
     })
 }
 
-$(function () {
-    $("#loaderbody").addClass('hide');
+function deleteConfirmation(url) {
+    $.ajax({
+        url: url,
+        type: "html",
+        success: function (data) {
+            $("#modal_container_delete").html(data.html);
+            console.log(data);
+            $("#modal_DeleteConfirm").modal('show');
+        },
+        error: function (p1, p2, p3) {
+            console.log("Error occurred in deleting record.")
+        }
+    });
+}
+function deleteRecord() {
+    var idToDelete = $("#idToDelete").val();
+    var controller = $("#controllerName").val();
+    var action = $("#actionName").val();
 
-    $(document).bind('ajaxStart', function () {
-        $("#loaderbody").removeClass('hide');
-    }).bind('ajaxStop', function () {
-        $("#loaderbody").addClass('hide');
+    $.ajax({
+        url: "/" + controller + "/" + action + "?id=" + idToDelete, // Set the URL of the MVC controller action
+        type: "POST", // Set the HTTP method (POST, GET, etc.)
+        data: { id: idToDelete }, // Pass the GUID as a string parameter
+        traditional: true, // Set traditional parameter serialization
+
+        success: function (data) {
+            $("#modal_DeleteConfirm").modal('hide');
+            window.location.href = `/${controller}/${data.redirectUrl}`;
+        },
+        error: function (xhr, status, error) {
+            // Handle any error that occurs during the AJAX call
+            console.log("AJAX call failed:", error);
+        }
     });
-});
-$(function () {
-    $(".navbar-nav li").click(function () {
-        $(".nav-item").removeClass("active");
-        $(this).addClass("active");
-    });
-    //var pathname = window.location.pathname;
-    //console.log("Current page", pathname);
-})
+}

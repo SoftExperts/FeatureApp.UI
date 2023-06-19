@@ -6,38 +6,60 @@ const connection = new signalR.HubConnectionBuilder()
     .configureLogging(signalR.LogLevel.Information)
     .build();
 
-console.log("connection log: ", connection)
+//console.log("1. First of All Connection will Created!--> ", connection)
 
-connection.on('ReceiveMessage', renderMessage);
+// Connection on with the Server and Recieve Messages for the all clients.
+connection.on('ReceiveMessages', renderMessage);
 
+// Connection start
 connection.start();
 
-function showChatDialog() {
-    var dialogEl = document.getElementById('chatDialog');
-    dialogEl.style.display = 'block';
-}
+// When the DOM Content Loaded call ready function
+document.addEventListener('DOMContentLoaded', ready);
 
-function sendMessage(text) {
-    if (text && text.length) {
-        connection.invoke('SendMessage', chatterName, text);
-    }
-}
-
+// Ready function Open the dialog box and send the message to the Server Hub.
 function ready() {
+
     setTimeout(showChatDialog, 750);
 
     var chatFormEl = document.getElementById('chatForm');
+
+    //console.log("2. Second Ready function call and get the form by id!--> ", chatFormEl)
+
     chatFormEl.addEventListener('submit', function (e) {
         e.preventDefault();
 
         var text = e.target[0].value;
+
+        console.log("4. Again ready function call to display text in the Chat Box using render message!--> ", text)
+
         e.target[0].value = '';
         sendMessage(text);
     })
 }
-document.addEventListener('DOMContentLoaded', ready);
 
+// Will open the Chat Dialog box.
+function showChatDialog() {
+    var dialogEl = document.getElementById('chatDialog');
+
+    console.log("3. ShowChatDialog function call to display chat box!--> ", dialogEl)
+
+    dialogEl.style.display = 'block';
+}
+
+// sendMessage function to send message to the server
+function sendMessage(text) {
+    if (text && text.length) {
+        console.log("5. sendMessage function call to send message to the server!--> ", text)
+        connection.invoke('SendMessage', chatterName, text);
+    }
+}
+
+// renderMessage function call to display text in the box for all the clients in the hub.
 function renderMessage(name, time, message) {
+
+    console.log("6. renderMessage function call to display text in the box:--> ")
+
     var nameSpan = document.createElement('span');
     nameSpan.className = 'name';
     nameSpan.textContent = name;
@@ -63,3 +85,4 @@ function renderMessage(name, time, message) {
     chatHistoryEl.appendChild(newItem);
     chatHistoryEl.scrollTop = chatHistoryEl.scrollHeight - chatHistoryEl.clientHeight;
 }
+

@@ -1,0 +1,26 @@
+﻿@model Models.Common.DeleteConfirmModel
+
+<div class="modal" tabindex="-1" role="dialog" id="modal_DeleteConfirm">
+    <input type="hidden" id="idToDelete" value="@Model.IdToDelete" />
+    <input type="hidden" id="controllerName" value="@Model.Controller" />
+    <input type="hidden" id="actionName" value="@Model.Action" />
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Delete Confirmation</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div>
+                    <p>Are you sure, you want to delete?</p>
+                </div>
+                <div class="float-right">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="button" id="btn_Delete" class="btn btn-danger" onclick="deleteRecord()">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -12,7 +12,7 @@ namespace Services.Product
 			this.httpClient = httpClient;
 		}
 
-        public async Task AddProductAsync(ProductModel product)
+        public async Task AddAsync(ProductModel product)
         {
 			try
 			{
@@ -25,7 +25,20 @@ namespace Services.Product
 			}
         }
 
-        public async Task<IEnumerable<ProductModel>> GetAllProductsAsync()
+        public async Task DeleteAsync(Guid Id)
+        {
+			try
+			{
+				await httpClient.DeleteAsync($"{ApiUrls.DeleteProduct}{Id}");
+			}
+			catch (Exception)
+			{
+
+				throw;
+			}
+        }
+
+        public async Task<IEnumerable<ProductModel>> GetAllAsync()
         {
 			try
 			{
@@ -36,6 +49,31 @@ namespace Services.Product
 			catch (Exception)
 			{
 
+				throw;
+			}
+        }
+
+        public async Task<ProductModel> GetById(Guid Id)
+        {
+			try
+			{
+				return await httpClient.GetByIdAsync<ProductModel>($"{ApiUrls.GetById}{Id}");
+            }
+            catch (Exception)
+			{
+
+				throw;
+			}
+        }
+
+        public async Task UpdateAsync(ProductModel product)
+        {
+			try
+			{
+                await httpClient.PutAsync<ProductModel>(product, ApiUrls.UpdateProduct);
+            }
+			catch (Exception)
+			{
 				throw;
 			}
         }

@@ -136,6 +136,24 @@ namespace Services.Http
                 throw;
             }
         }
+        
+        public async Task<T> GetByIdAsync<T>(string path)
+        {
+            try
+            {
+                var httpClient = await GetHttpClient();
+                var response = await httpClient.GetAsync(path);
+
+                if (!response.IsSuccessStatusCode)
+                    throw new Exception(response.ReasonPhrase);
+
+                return await DeserializeAsync<T>(response);
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
 
         public async Task<T> SendAsync<T, TModel>(string path, TModel model, HttpMethod method)
         {
