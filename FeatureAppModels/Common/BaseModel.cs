@@ -1,17 +1,14 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace Models.Common
+﻿namespace Models.Common
 {
     /// <summary>
     /// BaseModel contains common properties for each entity
     /// </summary>
-    public abstract class BaseModel
+    public abstract class BaseModel 
     {
         /// <summary>
         /// Key for each entity's each record.
         /// </summary>
-        [Key]
-        public Guid Id { get; set; } = Guid.Empty;
+        public Guid Id { get; set; }
         /// <summary>
         /// Date of the record created for each entity
         /// </summary>

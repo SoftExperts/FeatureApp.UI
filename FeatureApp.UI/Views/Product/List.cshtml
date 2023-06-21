@@ -1,0 +1,113 @@
+﻿@using FeatureApp.UI.ViewModels;
+@model ProductViewModel
+@{
+    ViewData["Title"] = "GetAllProducts";
+}
+
+<form asp-action="GetFilteredProducts">
+    <div class="row">
+        <div class="col-md-3">
+            <input asp-for="SearchTerm" class="form-control" placeholder="Search by name" value="@Model.SearchTerm" />
+        </div>
+        <div class="col-md-3">
+            <button type="submit" class="btn btn-info">Search</button>
+        </div>
+        <div class="col-md-3">
+            @using (Html.BeginForm("GetFilteredProducts", "Products", FormMethod.Post))
+            {
+                @Html.DropDownListFor(m => m.SortOrder,
+                    new SelectList(new[]
+                    {
+                        new SelectListItem { Text = "Ascending", Value = "asc" },
+                        new SelectListItem { Text = "Descending", Value = "desc" }
+                    }, 
+                    "Value", "Text"),
+                    "Select Sort Order",
+                    new 
+                    {  @class = "form-control" })
+            }
+            
+        </div>
+        <div class="col-md-3">
+            <button type="submit" class="btn btn-info">Sort</button>
+        </div>
+    </div>
+</form>
+<table class="table">
+    <thead>
+        <tr>
+
+            <th>
+                <a asp-action="GetFilteredProducts" asp-route-sortBy="Name">Name</a>
+            </th>
+            <th>
+                <a asp-action="GetFilteredProducts" asp-route-sortBy="Sku">Sku</a>
+            </th>
+            <th>
+                <a asp-action="GetFilteredProducts" asp-route-sortBy="Description">Description</a>
+            </th>
+            <th>
+                <a asp-action="GetFilteredProducts" asp-route-sortBy="Price">Price</a>
+            </th>
+            
+            <th>
+                <a asp-action="GetFilteredProducts" asp-route-sortBy="IsAvailable">IsAvailable</a>
+            </th>
+            <th class="no-print">
+                <a onclick="showInPopup('@Url.Action("Add","Product",null,Context.Request.Scheme)','AddAsync')" class="btn btn-success text-white"><i class="fas fa-random"></i> Add Product</a>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Products)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Sku)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Price)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.IsAvailable)
+                </td>
+                <td>
+                    <a onclick="showInPopup('@Url.Action("Edit","Product",new {productId=item.Id},Context.Request.Scheme)','Update')" class="btn btn-info text-white"><i class="fas fa-pencil-alt"></i> Edit</a>
+                    <a onclick="deleteConfirmation('@Url.Action("DeleteConfirmation","Product",new { idToDelete = item.Id },Context.Request.Scheme)')" class="btn btn-outline-danger text-danger"><i class="fas fa-trash-alt"></i> Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+
+</table>
+
+
+<form action="@Url.Action("GetFilteredProducts")">
+
+    <div class="row">
+        <div class="col-md-3">
+        </div>
+        <div class="col-md-3">
+            <input type="number" asp-for="Page" class="form-control" value="@Model.Page" />
+            <label for="page">Page:</label>
+        </div>
+        <div class="col-md-3">
+            <input type="number" asp-for="Size" class="form-control" value="@Model.Size" />
+            <label for="size">Size:</label>
+        </div>
+        <div class="col-md-3">
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+    </div>    
+</form>
+
+<div id="modal_container_delete">
+    <!--via ajax-->
+</div>

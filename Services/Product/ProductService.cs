@@ -1,4 +1,5 @@
-﻿using Models.Common;
+﻿using Entities.QueryFilters;
+using Models.Common;
 using Models.Product;
 using Services.Http;
 
@@ -40,9 +41,24 @@ namespace Services.Product
 
         public async Task<IEnumerable<ProductModel>> GetAllAsync()
         {
+            try
+            {
+                var products = await httpClient.GetAsync<ProductModel>(ApiUrls.GetFilteredProducts);
+
+                return (IEnumerable<ProductModel>)products;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        public async Task<IEnumerable<ProductModel>> GetFilteredProducts(ProductQueryParameter productQuery)
+        {
 			try
 			{
-			   var products = await httpClient.GetAsync<ProductModel>(ApiUrls.GetAllProducts);
+			   var products = await httpClient.PostAsync<ProductModel, ProductQueryParameter>(productQuery, ApiUrls.GetFilteredProducts);
 
 			   return (IEnumerable<ProductModel>)products;
 			}

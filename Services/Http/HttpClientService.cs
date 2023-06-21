@@ -22,44 +22,26 @@ namespace Services.Http
 
         #region public methods
 
-        public async Task<HttpResponseMessage> PostAsync<T>(T model, string path) where T : class
+        public async Task<List<TResult>> PostAsync<TResult, TRequest>(TRequest request, string path) where TRequest : class where TResult : class
         {
             try
             {
-                HttpContent stringContent = SetHttpContent(model);
+                HttpContent stringContent = SetHttpContent(request);
                 var httpClient = await GetHttpClient();
                 var result = await httpClient.PostAsync(path, stringContent);
                 if (!result.IsSuccessStatusCode)
                     throw new InvalidOperationException(result.ReasonPhrase);
 
-                return result;
+                return await DeserializeAsync<List<TResult>>(result);
+               
             }
             catch (Exception)
             {
                 throw;
             }
         }
-        public async Task<returnT> PostAsJsonAsync<returnT, modelT>(modelT model, string path) where modelT : class
-        {
-            try
-            {
-                var httpClient = await GetHttpClient();
-                var result = await httpClient.PostAsJsonAsync(path, model);
-
-                if (!result.IsSuccessStatusCode)
-                    throw new InvalidOperationException(result.ReasonPhrase);
-                var jsonString = await result.Content.ReadAsStringAsync();
-
-                var returnObject = JsonConvert.DeserializeObject<returnT>(jsonString);
-                return returnObject;
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
-        public async Task<HttpResponseMessage> Post<T>(T model, string path) where T : class
-        {
+         public async Task<HttpResponseMessage> PostAsync<T>(T model, string path) where T : class
+         {
             try
             {
                 HttpContent stringContent = SetHttpContent(model);
@@ -71,7 +53,7 @@ namespace Services.Http
             {
                 throw;
             }
-        }
+         }
 
         public async Task<T> PutAsync<T>(T model, string path) where T : class
         {
@@ -136,7 +118,7 @@ namespace Services.Http
                 throw;
             }
         }
-        
+                
         public async Task<T> GetByIdAsync<T>(string path)
         {
             try

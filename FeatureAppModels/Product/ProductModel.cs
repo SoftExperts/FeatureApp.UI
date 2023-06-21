@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Entities.QueryFilters;
 using Models.Common;
 
 namespace Models.Product

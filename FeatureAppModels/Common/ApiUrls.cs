@@ -6,6 +6,7 @@
 
         //Product
         public static string GetAllProducts => "products/GetAllProducts";
+        public static string GetFilteredProducts => "products/GetFilteredProducts";
         public static string AddProduct => "products/AddProduct";
         public static string UpdateProduct => "products/UpdateProduct";
         public static string GetById => "products/GetProductById/";

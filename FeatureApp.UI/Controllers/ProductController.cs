@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Entities.QueryFilters;
+using FeatureApp.UI.ViewModels;
+using Microsoft.AspNetCore.Mvc;
 using Models.Common;
 using Models.Product;
 using NTA.Extensions;
@@ -18,9 +20,30 @@ namespace FeatureApp.UI.Controllers
         {
             try
             {
-                var products = await productService.GetAllAsync();
+                ProductViewModel products = new()
+                {
+                    Products = await productService.GetAllAsync()
+                };
 
-                return View(products);
+                return View("List",products);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }            
+        }
+        
+        public async Task<IActionResult> GetFilteredProducts(ProductQueryParameter productQuery)
+        {
+            try
+            {
+                ProductViewModel products = new()
+                {
+                    Products = await productService.GetFilteredProducts(productQuery)
+                };
+
+                return View("List", products);
             }
             catch (Exception)
             {
