@@ -85,4 +85,3 @@ function renderMessage(name, time, message) {
     chatHistoryEl.appendChild(newItem);
     chatHistoryEl.scrollTop = chatHistoryEl.scrollHeight - chatHistoryEl.clientHeight;
 }
-

@@ -13,3 +13,13 @@
         </div>
     </div>
 </div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var chatDialog = document.getElementById('chatDialog');
+
+        // Show/hide chat box when clicking on the header
+        chatDialog.addEventListener('click', function () {
+            chatDialog.classList.toggle('show');
+        });
+    });
+</script>
